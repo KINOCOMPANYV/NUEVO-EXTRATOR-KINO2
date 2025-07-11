@@ -32,18 +32,30 @@ def index():
 
             try:
                 datos = []
-                qty_pat  = re.compile(r'^(\d+)[x×]$')
-                code_pat = re.compile(r'^[A-Za-z0-9][A-Za-z0-9:.\-]*$')
+                # Patrón unificado: captura cantidad y código pegados o separados
+                combined_pat = re.compile(r'^(\d+)[x×]\s*([A-Za-z0-9][A-Za-z0-9:.\-]*)$')
+                # Patrón solo cantidad (para fallback)
+                qty_only_pat = re.compile(r'^(\d+)[x×]\s*$')
 
                 with pdfplumber.open(path) as pdf:
                     for page in pdf.pages:
                         words = page.extract_words(use_text_flow=True)
                         for idx, w in enumerate(words):
-                            m = qty_pat.match(w['text'])
-                            if m and idx + 1 < len(words):
-                                cantidad = int(m.group(1))
+                            txt = w['text']
+                            # 1) ¿Cantidad+Código en la misma palabra?
+                            m1 = combined_pat.match(txt)
+                            if m1:
+                                cantidad = int(m1.group(1))
+                                codigo   = m1.group(2)
+                                datos.append({'codigo': codigo, 'cantidad': cantidad})
+                                continue
+                            # 2) ¿Solo cantidad? entonces tomo la siguiente palabra como código
+                            m2 = qty_only_pat.match(txt)
+                            if m2 and idx + 1 < len(words):
+                                cantidad = int(m2.group(1))
                                 codigo   = words[idx+1]['text']
-                                if code_pat.match(codigo):
+                                # validamos que el token “parezca” código
+                                if re.match(r'^[A-Za-z0-9][A-Za-z0-9:.\-]*$', codigo):
                                     datos.append({'codigo': codigo, 'cantidad': cantidad})
 
                 total = len(datos)
