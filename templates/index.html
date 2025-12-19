@@ -1,39 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Extractor de Código y Cantidad</title>
-  <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f0f2f5; }
-    h1 { color: #005fa3; }
-    form { margin-bottom: 1.5rem; }
-    button { margin-left: 0.5rem; }
-    table { border-collapse: collapse; width: 80%; max-width:600px; background: #fff; margin-top: 1rem; }
-    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: center; }
-    th { background: #0074D9; color: #fff; }
-    .error { color: #c00; }
-    .total { margin-top: 1rem; font-weight: bold; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extractor de Código y Cantidad - PDF</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
-  <h1>📑 Subir y Procesar PDF</h1>
+  <div class="container">
+    <header>
+      <h1>
+        <span class="icon">📑</span>
+        Extractor de Códigos PDF
+      </h1>
+      <p class="subtitle">Sube tu PDF y extrae códigos y cantidades automáticamente</p>
+    </header>
 
-  {% if error %}
-    <p class="error">{{ error }}</p>
-  {% endif %}
-
-  <form method="post" enctype="multipart/form-data">
-    <input type="file" name="pdf" accept="application/pdf" required>
-    <button type="submit">Procesar</button>
-    {% if resumen_html %}
-      <button type="button" onclick="window.location.href='/'">Limpiar</button>
+    {% if error %}
+    <div class="message error">
+      <span>⚠️</span>
+      <span>{{ error }}</span>
+    </div>
     {% endif %}
-  </form>
 
-  {% if resumen_html %}
-    <p class="total">Total de códigos encontrados: {{ total }}</p>
-    <h2>📊 Todas las ocurrencias</h2>
-    {{ resumen_html|safe }}
-  {% endif %}
+    <section class="upload-section">
+      <form method="post" enctype="multipart/form-data">
+        <div class="file-input-wrapper">
+          <input type="file" name="pdf" id="pdf-input" accept="application/pdf" required>
+          <label for="pdf-input" class="file-input-label">
+            <span>📎</span>
+            <span class="file-name"></span>
+            <span class="default-text">Arrastra tu PDF aquí o haz clic para seleccionar</span>
+          </label>
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="btn-primary">
+            <span>🚀</span>
+            Procesar PDF
+          </button>
+          {% if resumen_html %}
+          <button type="button" class="btn-secondary" onclick="window.location.href='/'">
+            <span>🔄</span>
+            Limpiar
+          </button>
+          {% endif %}
+        </div>
+      </form>
+    </section>
+
+    {% if resumen_html %}
+    <section class="results-section">
+      <div class="total-count">
+        ✅ Códigos encontrados
+        <span class="number">{{ total }}</span>
+      </div>
+
+      <h2>
+        <span>📊</span>
+        Resultados Detallados
+      </h2>
+
+      <div class="table-wrapper">
+        {{ resumen_html|safe }}
+      </div>
+    </section>
+    {% endif %}
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
+
 </html>

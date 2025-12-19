@@ -63,6 +63,8 @@ def index():
                     error_msg = "No se hallaron códigos/cantidades en el PDF."
                 else:
                     df = pd.DataFrame(datos, columns=['codigo','cantidad'])
+                    # Agregar columna vacía en el medio para estética
+                    df.insert(1, '', '')
                     resumen_html = df.to_html(index=False)
 
             except Exception as e:
