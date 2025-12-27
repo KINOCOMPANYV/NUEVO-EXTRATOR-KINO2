@@ -118,9 +118,9 @@ function copyAllCodes(type) {
         const codigo = checkbox.dataset.codigo;
         const cantidad = checkbox.dataset.cantidad;
 
-        // Formato: codigo cantidad (uno por línea)
+        // Formato: codigo [TAB] [TAB] cantidad (simulando columna vacía en medio)
         if (codigo && codigo !== '?') {
-            codes.push(`${codigo} ${cantidad}`);
+            codes.push(`${codigo}\t\t${cantidad}`);
         }
     });
 
@@ -138,9 +138,9 @@ function copySelectedCodes() {
         const codigo = checkbox.dataset.codigo;
         const cantidad = checkbox.dataset.cantidad;
 
-        // Formato: codigo cantidad (uno por línea)
+        // Formato: codigo [TAB] [TAB] cantidad
         if (codigo && codigo !== '?') {
-            codes.push(`${codigo} ${cantidad}`);
+            codes.push(`${codigo}\t\t${cantidad}`);
         }
     });
 

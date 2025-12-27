@@ -77,6 +77,7 @@
                 <input type="checkbox" id="select-all-encontrados" onchange="toggleSelectAll('encontrados')">
               </th>
               <th>Código</th>
+              <th class="empty-col"></th>
               <th>Cantidad</th>
             </tr>
           </thead>
@@ -88,6 +89,7 @@
                   data-cantidad="{{ item.cantidad }}">
               </td>
               <td>{{ item.codigo }}</td>
+              <td class="empty-col"></td>
               <td>{{ item.cantidad }}</td>
             </tr>
             {% endfor %}
@@ -124,6 +126,7 @@
                 <input type="checkbox" id="select-all-posibles" onchange="toggleSelectAll('posibles')">
               </th>
               <th>Código</th>
+              <th class="empty-col"></th>
               <th>Cantidad</th>
               <th>Razón</th>
             </tr>
@@ -136,6 +139,7 @@
                   data-cantidad="{{ item.cantidad }}">
               </td>
               <td>{{ item.codigo }}</td>
+              <td class="empty-col"></td>
               <td>{{ item.cantidad }}</td>
               <td class="razon-cell">{{ item.razon }}</td>
             </tr>
