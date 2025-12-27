@@ -47,15 +47,17 @@ def index():
                 posibles = []     # Baja confianza
                 
                 # Patrones de alta confianza
-                combined_pat = re.compile(r'^(\d+)[x×]\s*([A-Za-z0-9][A-Za-z0-9:.\\-]*)$', re.IGNORECASE)
+                # Nota: El guion '-' dentro de [] debe ir al final para no ser interpretado como rango
+                combined_pat = re.compile(r'^(\d+)[x×]\s*([A-Za-z0-9][A-Za-z0-9:.-]*)$', re.IGNORECASE)
                 qty_only_pat = re.compile(r'^(\d+)[x×]\s*$')
                 
                 # Patrones de baja confianza
-                code_only_pat = re.compile(r'^[A-Za-z0-9][A-Za-z0-9:.\\-]{2,}$')  # Código sin cantidad
-                qty_space_code_pat = re.compile(r'^(\d+)\s+([A-Za-z0-9][A-Za-z0-9:.\\-]+)$')  # Cantidad espacio código
+                code_only_pat = re.compile(r'^[A-Za-z0-9][A-Za-z0-9:.-]{2,}$')  # Código sin cantidad
+                qty_space_code_pat = re.compile(r'^(\d+)\s+([A-Za-z0-9][A-Za-z0-9:.-]+)$')  # Cantidad espacio código
                 long_number_pat = re.compile(r'^\d{5,}$')  # Números largos pueden ser códigos
 
                 with pdfplumber.open(path) as pdf:
+
                     for page in pdf.pages:
                         words = page.extract_words(use_text_flow=True)
                         i = 0
@@ -76,7 +78,7 @@ def index():
                             m2 = qty_only_pat.match(txt)
                             if m2 and i + 1 < len(words):
                                 siguiente = words[i+1]['text']
-                                if re.match(r'^[A-Za-z0-9][A-Za-z0-9:.\\-]*$', siguiente):
+                                if re.match(r'^[A-Za-z0-9][A-Za-z0-9:.-]*$', siguiente):
                                     cantidad = int(m2.group(1))
                                     encontrados.append({'codigo': siguiente, 'cantidad': cantidad})
                                     i += 2
@@ -100,7 +102,8 @@ def index():
                             m4 = code_only_pat.match(txt)
                             if m4:
                                 # Verificar que no sea una palabra común (tiene que tener números o guiones)
-                                if re.search(r'[0-9\\-:]', txt):
+                                if re.search(r'[0-9\-:]', txt):
+
                                     posibles.append({'codigo': txt, 'cantidad': '?', 'razon': 'Código sin cantidad'})
                                     added = True
                             
