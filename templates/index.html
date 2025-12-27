@@ -41,7 +41,7 @@
             <span>🚀</span>
             Procesar PDF
           </button>
-          {% if resumen_html %}
+          {% if encontrados or posibles %}
           <button type="button" class="btn-secondary" onclick="window.location.href='/'">
             <span>🔄</span>
             Limpiar
@@ -51,23 +51,115 @@
       </form>
     </section>
 
-    {% if resumen_html %}
+    {% if encontrados %}
     <section class="results-section">
-      <div class="total-count">
-        ✅ Códigos encontrados
-        <span class="number">{{ total }}</span>
+      <div class="section-header encontrados-header">
+        <div class="total-count encontrados-count">
+          ✅ Códigos Encontrados
+          <span class="number">{{ total_encontrados }}</span>
+        </div>
+        <button type="button" class="copy-btn" onclick="copyAllCodes('encontrados')">
+          <span>📋</span>
+          Copiar Todos
+        </button>
       </div>
 
       <h2>
         <span>📊</span>
-        Resultados Detallados
+        Resultados con Alta Confianza
       </h2>
 
       <div class="table-wrapper">
-        {{ resumen_html|safe }}
+        <table id="table-encontrados">
+          <thead>
+            <tr>
+              <th>
+                <input type="checkbox" id="select-all-encontrados" onchange="toggleSelectAll('encontrados')">
+              </th>
+              <th>Código</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in encontrados %}
+            <tr>
+              <td>
+                <input type="checkbox" class="row-checkbox encontrados-checkbox" data-codigo="{{ item.codigo }}"
+                  data-cantidad="{{ item.cantidad }}">
+              </td>
+              <td>{{ item.codigo }}</td>
+              <td>{{ item.cantidad }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     </section>
     {% endif %}
+
+    {% if posibles %}
+    <section class="results-section posibles-section">
+      <div class="section-header posibles-header">
+        <div class="total-count posibles-count">
+          ⚠️ Códigos Posibles
+          <span class="number">{{ total_posibles }}</span>
+        </div>
+        <button type="button" class="copy-btn copy-btn-warning" onclick="copyAllCodes('posibles')">
+          <span>📋</span>
+          Copiar Todos
+        </button>
+      </div>
+
+      <h2 class="posibles-title">
+        <span>🔍</span>
+        Códigos que Requieren Revisión
+      </h2>
+      <p class="warning-text">Estos códigos no cumplen completamente el patrón estándar. Revísalos antes de copiar.</p>
+
+      <div class="table-wrapper">
+        <table id="table-posibles">
+          <thead>
+            <tr>
+              <th>
+                <input type="checkbox" id="select-all-posibles" onchange="toggleSelectAll('posibles')">
+              </th>
+              <th>Código</th>
+              <th>Cantidad</th>
+              <th>Razón</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in posibles %}
+            <tr>
+              <td>
+                <input type="checkbox" class="row-checkbox posibles-checkbox" data-codigo="{{ item.codigo }}"
+                  data-cantidad="{{ item.cantidad }}">
+              </td>
+              <td>{{ item.codigo }}</td>
+              <td>{{ item.cantidad }}</td>
+              <td class="razon-cell">{{ item.razon }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+
+    {% if encontrados or posibles %}
+    <section class="copy-actions">
+      <button type="button" class="btn-primary btn-large" onclick="copySelectedCodes()">
+        <span>✅</span>
+        Copiar Seleccionados
+      </button>
+    </section>
+    {% endif %}
+
+    <!-- Notification Toast -->
+    <div id="copy-notification" class="copy-notification">
+      <span class="notification-icon">✅</span>
+      <span class="notification-text">Códigos copiados al portapapeles!</span>
+    </div>
   </div>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>

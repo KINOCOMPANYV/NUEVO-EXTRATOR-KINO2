@@ -421,3 +421,187 @@ td:last-child {
 .mb-3 {
     margin-bottom: 1.5rem;
 }
+
+/* ===================================
+   New Copy & Dual Table Styles
+   =================================== */
+
+/* Section Headers with Copy Buttons */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.encontrados-header {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+}
+
+.posibles-header {
+    background: linear-gradient(135deg, #fff3cd, #ffe69c);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+}
+
+.encontrados-count {
+    background: linear-gradient(135deg, var(--success-color), #28a745) !important;
+}
+
+.posibles-count {
+    background: linear-gradient(135deg, #ff9800, #ff5722) !important;
+}
+
+/* Copy Buttons */
+.copy-btn {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.copy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--primary-dark);
+}
+
+.copy-btn-warning {
+    background: #ff9800;
+}
+
+.copy-btn-warning:hover {
+    background: #f57c00;
+}
+
+/* Possible Codes Section */
+.posibles-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #fffbf0;
+    border-radius: var(--radius-lg);
+    border: 2px solid #ffc107;
+}
+
+.posibles-title {
+    color: #f57c00;
+}
+
+.warning-text {
+    color: #d68910;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: #fff3cd;
+    border-left: 4px solid #ff9800;
+    border-radius: var(--radius-sm);
+}
+
+/* Table Checkboxes */
+th input[type="checkbox"],
+td input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+th:first-child,
+td:first-child {
+    width: 40px;
+    text-align: center;
+}
+
+.razon-cell {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Copy Actions Section */
+.copy-actions {
+    margin-top: 2rem;
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+}
+
+.btn-large {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+}
+
+/* Copy Notification Toast */
+.copy-notification {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: linear-gradient(135deg, var(--success-color), #2ECC40);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    transform: translateY(150%);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1000;
+}
+
+.copy-notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.notification-icon {
+    font-size: 1.5rem;
+}
+
+/* Table Improvements */
+#table-encontrados tbody tr:hover {
+    background: #d4edda;
+}
+
+#table-posibles tbody tr:hover {
+    background: #fff3cd;
+}
+
+/* Responsive Updates */
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .copy-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .copy-notification {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+    }
+
+    .razon-cell {
+        font-size: 0.75rem;
+    }
+}

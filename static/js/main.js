@@ -96,3 +96,109 @@ if (container && fileInputWrapper && fileInput) {
         }
     }
 }
+
+// ===================================
+// Copy Functionality
+// ===================================
+
+function toggleSelectAll(type) {
+    const selectAllCheckbox = document.getElementById(`select-all-${type}`);
+    const checkboxes = document.querySelectorAll(`.${type}-checkbox`);
+
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+    });
+}
+
+function copyAllCodes(type) {
+    const checkboxes = document.querySelectorAll(`.${type}-checkbox`);
+    const codes = [];
+
+    checkboxes.forEach(checkbox => {
+        const codigo = checkbox.dataset.codigo;
+        const cantidad = checkbox.dataset.cantidad;
+
+        // Formato: codigo cantidad (uno por línea)
+        if (codigo && codigo !== '?') {
+            codes.push(`${codigo} ${cantidad}`);
+        }
+    });
+
+    if (codes.length > 0) {
+        copyToClipboard(codes.join('\n'));
+        showCopyNotification(`${codes.length} códigos copiados`);
+    }
+}
+
+function copySelectedCodes() {
+    const allCheckboxes = document.querySelectorAll('.row-checkbox:checked');
+    const codes = [];
+
+    allCheckboxes.forEach(checkbox => {
+        const codigo = checkbox.dataset.codigo;
+        const cantidad = checkbox.dataset.cantidad;
+
+        // Formato: codigo cantidad (uno por línea)
+        if (codigo && codigo !== '?') {
+            codes.push(`${codigo} ${cantidad}`);
+        }
+    });
+
+    if (codes.length > 0) {
+        copyToClipboard(codes.join('\n'));
+        showCopyNotification(`${codes.length} código${codes.length > 1 ? 's' : ''} copiado${codes.length > 1 ? 's' : ''}`);
+    } else {
+        showCopyNotification('Selecciona al menos un código', 'warning');
+    }
+}
+
+function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            console.log('Códigos copiados exitosamente');
+        }).catch(err => {
+            console.error('Error al copiar:', err);
+            fallbackCopy(text);
+        });
+    } else {
+        fallbackCopy(text);
+    }
+}
+
+function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+        document.execCommand('copy');
+        console.log('Códigos copiados (fallback)');
+    } catch (err) {
+        console.error('Error al copiar con fallback:', err);
+    }
+
+    document.body.removeChild(textarea);
+}
+
+function showCopyNotification(message = 'Códigos copiados al portapapeles!', type = 'success') {
+    const notification = document.getElementById('copy-notification');
+    const textElement = notification.querySelector('.notification-text');
+
+    textElement.textContent = message;
+
+    // Cambiar color según tipo
+    if (type === 'warning') {
+        notification.style.background = 'linear-gradient(135deg, #ff9800, #ff5722)';
+    } else {
+        notification.style.background = 'linear-gradient(135deg, var(--success-color), #2ECC40)';
+    }
+
+    notification.classList.add('show');
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
